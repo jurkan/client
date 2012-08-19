@@ -34,18 +34,7 @@ function debugConnect()
 	};
 }
 
-function connect(username, password)
-{
-	accountServer = new WebSocket(accountServerConnectionString);
-	
-	// when the connection is established, this method is called
-	accountServer.onopen = function () {
-		//login("seeseekey", "geheim");
-		registerAccount("hallo", "geheim", "s.eeseekey@gmail.com", "IGNORxE");
-	};
-	
-	// when data is comming from the server, this metod is called
-	accountServer.onmessage = function (message) {
+function onMessage(message) {
 		var responseMessage=new MessageIn(message.data);
 	
 		switch(responseMessage.id)
@@ -70,7 +59,20 @@ function connect(username, password)
 				break;
 			}
 		}
+	}
+
+function connect(username, password)
+{
+	accountServer = new WebSocket(accountServerConnectionString);
+	
+	// when the connection is established, this method is called
+	accountServer.onopen = function () {
+		//login("seeseekey", "geheim");
+		registerAccount("hallo", "geheim", "s.eeseekey@gmail.com", "IGNORxE");
 	};
+	
+	// when data is comming from the server, this metod is called
+	accountServer.onmessage = onMessage;
 }
 
 function login(username, password)
